@@ -1,6 +1,9 @@
 <template>
     <div class="profile">
-        <div class="profile-avatar"><img v-if="profile.avatar" :src="profile.avatar" alt="" class="profile-avatar-img"></div>
+        <div class="profile-avatar">
+            <img v-if="profile.avatar" :src="profile.avatar" alt="" class="profile-avatar-img">
+            <span v-else class="profile-avatar-text">{{profile.nickname?.substr(0, 1) ?? 'N'}}</span>
+        </div>
         <h3 class="profile-nickname">
             {{profile.nickname}}
         </h3>
@@ -19,14 +22,14 @@ import { toRef, toRefs } from 'vue'
     @import '@sass'
     .profile
         width: 330px
-        padding: 70px 0 40px 
+        padding: 70px 0 70px 
         +setFlex(center, flex-start, column)
         .profile-avatar
             width: 64px
             height: 64px
             background: $blueberry100
-            border: 1px solid $blueberry900
-            box-shadow: -1px 2px 2px $bubblegum900
+            border: 1px solid $blueberry700
+            box-shadow: -1px 2px 2px $bubblegum700
             transition-property: box-shadow, transform
             transition-duration: 0.3s
             transition-timing-function: ease-in-out
@@ -38,6 +41,8 @@ import { toRef, toRefs } from 'vue'
             img
                 width: 100%
                 height: 100%
+            .profile-avatar-text
+                +setFont(400, 34px, $blueberry700)
             &:hover
                 box-shadow: -3px 4px 2px $bubblegum900
                 transform: translate(4px, -4px)

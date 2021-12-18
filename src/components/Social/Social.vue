@@ -47,6 +47,10 @@
     +setFlex
     li
         margin-right: 8px
+        svg
+            path
+                // fill: #fff
+                // stroke: #fff
         &:last-child
             margin-right: 0
 </style>
