@@ -1,5 +1,5 @@
 <template>
-    <div class="article-card">
+    <div @click="click" class="article-card">
         <h3 class="article-card-title">
             {{props.card.title}}
         </h3>
@@ -13,7 +13,10 @@ import { shallowReactive } from 'vue';
 import ArticleCard from '@/interface/ArticleCard';
 
 const props = defineProps<{card: ArticleCard}>()
-
+const emit = defineEmits(['click'])
+function click() {
+    emit('click', props.card)
+}
 
 </script>
 <style lang="sass">

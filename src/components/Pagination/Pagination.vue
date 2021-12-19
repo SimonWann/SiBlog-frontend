@@ -1,50 +1,88 @@
 <template lang="">
   <div class="pagination">
-    
+    <ButtonGroup
+    v-slot:default="slotProps"
+    >
+      <Button
+      @click="firstButton.click"
+      :disabled="firstButton.disabled || !beforePage"
+      >{{firstButton.text}}</Button>
+      <Button v-if="beforePage && beforePage.pageNum !== start || currentPage.pageNum !== start" :disabled="true">{{spacer}}</Button>
+      <Button @click="setPage(beforePage.pageNum)" v-if="beforePage">{{beforePage.pageNum}}</Button>
+      <Button :disabled="true">{{currentPage.pageNum}}</Button>
+      <Button @click="setPage(afterPage.pageNum)" v-if="afterPage">{{afterPage.pageNum}}</Button>
+      <Button v-if="afterPage && afterPage.pageNum !== total || currentPage.pageNum !== total" :disabled="true">{{spacer}}</Button>
+      <Button
+      @click="lastButton.click"
+      :disabled="lastButton.disabled || !afterPage"
+      >{{lastButton.text}}</Button>
+    </ButtonGroup>
   </div>
 </template>
 <script setup lang="ts">
-import { ref,reactive, computed } from "vue";
+import { ref,reactive, computed, onMounted } from "vue";
+import Button from '@components/Pagination/Button.vue'
+import ButtonGroup from '@components/Pagination/ButtonGroup.vue'
 
-const pageNum = ref<number>(1)
-const total = ref<number>(10)
-const currentPage = computed<Page>(() => generatePage(pageNum.value))
-
-
-interface Page{
-  pageNum: number,
-  // 遍历两次，
-  lastPage: Page,
-  nextPage: Page,
-  isFirst: boolean,
-  isLast: boolean
-}
-function beforePageNum(lastPage: Page): number {
-  return PageNum(lastPage, 'lastPage')
-}
-function afterPageNum(nextPage: Page): number {
-  return PageNum(nextPage, 'nextPage')
-}
-function PageNum(Page: Page, direction: string): number {
-  let result : number = 0
-  while(Page != null) {
-    if(result >= 2) break
-    result++ 
-    Page = direction === 'lastPage' ? Page.lastPage : Page.nextPage
-  }
-  return result
-}
-function generatePage(pageNum: number): Page {
-  const lastPage = generatePage(pageNum - 1)
-  const nextPage = generatePage(pageNum + 1)
-  return {
-    pageNum,
-    lastPage,
-    nextPage,
-    isFirst: lastPage == null,
-    isLast: nextPage == null
+class Page{
+  pageNum: number
+  constructor(pageNum: number) {
+    this.pageNum = pageNum
   }
 }
+class ButtonEle {
+  text: string | number
+  disabled: boolean
+  click: Function
+  pageNum ?: number
+  constructor(text: string, disabled: boolean, click: Function, pageNum ?: number) {
+    this.text = text
+    this.disabled = disabled
+    this.click = click
+    this.pageNum = pageNum
+  }
+}
+
+const slotProps = ref(null)
+const start = ref(1)
+const total = ref(10)
+const pageNum = ref(1)
+const spacer = ref('...')
+const pages: Page[] = reactive<Page[]>([])
+for (let i = start.value; i <= total.value; i++) {
+  pages.push(new Page(i))
+}
+const currentPageIndex = computed<number>(() => pages.findIndex(ele => ele.pageNum === pageNum.value))
+const currentPage = computed<Page>(() => pages[currentPageIndex.value])
+const beforePage = computed<Page | null>(() => (currentPageIndex.value - 1) >= 0? pages[currentPageIndex.value - 1] : null)
+const afterPage = computed<Page | null>(() => ((currentPageIndex.value + 1) < pages.length) ? pages[currentPageIndex.value + 1] : null)
+function setPage(num: number) {
+  if(num < start.value) return
+  if(num > total.value) return
+  pageNum.value = num
+}
+function toAfterPage() {
+  setPage(pageNum.value + 1)
+}
+function toBeforePageA() {
+  setPage(pageNum.value - 1)
+}
+
+const firstButton = reactive<ButtonEle>(new ButtonEle(
+  '第一页',
+  false,
+  () => {setPage(1)}
+))
+const lastButton = reactive<ButtonEle>(new ButtonEle(
+  '最后一页',
+  false,
+  () => {setPage(pages[pages.length - 1].pageNum)}
+))
+
+onMounted(() => {
+  
+})
+
 
 </script>
 <style lang="sass">

@@ -11,7 +11,10 @@
         <section class="home-bottom">
             <ArticleListVue
             :list="articleList"
-            ></ArticleListVue>
+            ></ArticleListVue>  
+        </section>
+        <section class="home-pagination">
+            <PaginationVue></PaginationVue>
         </section>
     </div>
 </template>
@@ -19,6 +22,7 @@
 import Nav from '@components/Nav/Nav.vue'
 import Profile from '@components/Profile/Profile.vue'
 import ArticleListVue from '@/components/ArticleList/ArticleList.vue';
+import PaginationVue from '@/components/Pagination/Pagination.vue';
 import { shallowReactive } from 'vue';
 import profileInterface from '@/components/Profile/profile'
 import ArticleCard from '@/interface/ArticleCard'
@@ -44,7 +48,7 @@ const articleList = shallowReactive<ArticleCard[]>([
 <style lang="sass">
     @import '@sass'
     .home
-        
+        padding-bottom: 10px
         min-height: 400px
         box-sizing: border-box
         overflow: hidden
@@ -53,4 +57,6 @@ const articleList = shallowReactive<ArticleCard[]>([
             +setFlex(flex-start, space-between, column)
             .profile-container
                 +setFlex(center)
+        .home-pagination
+            +setFlex(center)
 </style>

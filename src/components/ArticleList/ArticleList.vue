@@ -2,6 +2,7 @@
   <div class="article-list">
     <ArticleCard 
     v-for="val in props.list"
+    @click="goArticlePage"
     :card="val"
     />
   </div>
@@ -9,9 +10,15 @@
 <script setup lang="ts">
 import ArticleCardInterface from '@/interface/ArticleCard'
 import ArticleCard from '@components/ArticleCard/ArticleCard.vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const props = defineProps<{list: ArticleCardInterface[]}>()
-
+const router = useRouter()
+function goArticlePage() {
+  router.push({
+    path: '/article'
+  })
+}
 
 </script>
 <style lang="sass">
