@@ -4,15 +4,17 @@
     v-slot:default="slotProps"
     >
       <Button
+      class="pagination-head"
       @click="firstButton.click"
       :disabled="firstButton.disabled || !beforePage"
       >{{firstButton.text}}</Button>
-      <Button v-if="beforePage && beforePage.pageNum !== start || currentPage.pageNum !== start" :disabled="true">{{spacer}}</Button>
+      <Button class="pagination-spcaer" v-if="beforePage && beforePage.pageNum !== start || currentPage.pageNum !== start" :disabled="true">{{spacer}}</Button>
       <Button @click="setPage(beforePage.pageNum)" v-if="beforePage">{{beforePage.pageNum}}</Button>
       <Button :disabled="true">{{currentPage.pageNum}}</Button>
       <Button @click="setPage(afterPage.pageNum)" v-if="afterPage">{{afterPage.pageNum}}</Button>
-      <Button v-if="afterPage && afterPage.pageNum !== total || currentPage.pageNum !== total" :disabled="true">{{spacer}}</Button>
+      <Button class="pagination-spcaer" v-if="afterPage && afterPage.pageNum !== total || currentPage.pageNum !== total" :disabled="true">{{spacer}}</Button>
       <Button
+      class="pagination-tail"
       @click="lastButton.click"
       :disabled="lastButton.disabled || !afterPage"
       >{{lastButton.text}}</Button>
@@ -69,12 +71,12 @@ function toBeforePageA() {
 }
 
 const firstButton = reactive<ButtonEle>(new ButtonEle(
-  '第一页',
+  'Head',
   false,
   () => {setPage(1)}
 ))
 const lastButton = reactive<ButtonEle>(new ButtonEle(
-  '最后一页',
+  'Tail',
   false,
   () => {setPage(pages[pages.length - 1].pageNum)}
 ))
@@ -86,5 +88,8 @@ onMounted(() => {
 
 </script>
 <style lang="sass">
-  
+
+@media screen and (max-width: 410px)
+  .pagination
+    margin-top: 15px
 </style>

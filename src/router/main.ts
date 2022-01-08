@@ -9,10 +9,15 @@ const routes = [
     {
         path: '/article',
         component: () => import('@/pages/Articles.vue')
+    },
+    {
+        path: '/edit',
+        component: () => import('@/pages/EditArea.vue')
     }
 ]
-
-export default createRouter({
+const router = createRouter({
     history: createWebHistory(),
     routes
 })
+
+export default router
